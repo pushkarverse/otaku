@@ -2,8 +2,7 @@
 
 # ⛩️ OTAKU
 
-**OTAKU** — A high-performance, modular motion-tracking platform that brings your favorite anime techniques to life through the web.  
-Powered by **MediaPipe**, **Three.js**, and **pnpm**.
+**OTAKU** — An immersive real-time motion-tracking application leveraging advanced computer vision and 3D rendering to visualize iconic anime techniques.
 
 
 
