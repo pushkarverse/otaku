@@ -59,7 +59,7 @@ This project features several specialized modules, each using advanced hand/pose
     *   Simply open `index.html` in any modern browser.
     *   **Recommended**: Use a local server for the best experience:
         ```bash
-        npx http-server .
+        pnpm dlx http-server .
         ```
 
 ## ⚙️ Configuration
