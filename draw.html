@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chakra Canvas - Premium Draw</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #050505;
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+            user-select: none;
+        }
+
+        #draw-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 5;
+            filter: drop-shadow(0 0 10px rgba(0,255,200,0.2));
+        }
+
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 6;
+            pointer-events: none;
+        }
+
+        #video-src {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            transform: scaleX(-1);
+            opacity: 0.2;
+            z-index: 0;
+            filter: grayscale(1) contrast(1.2);
+        }
+
+        .background-aura {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 204, 0.05) 0%, transparent 70%);
+            z-index: 1;
+            animation: pulse 8s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        /* UI Toolbar */
+        .toolbar {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(10, 10, 10, 0.85);
+            padding: 12px 20px;
+            border-radius: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .tool-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #1a1a1a;
+            color: #888;
+            font-size: 0.75rem;
+            font-weight: 900;
+            position: relative;
+        }
+
+        .tool-btn:hover {
+            transform: translateY(-3px);
+            background: #252525;
+            color: white;
+        }
+
+        .tool-btn.active {
+            border-color: currentColor;
+            background: #222;
+            color: white;
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .color-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .divider {
+            width: 1px;
+            height: 30px;
+            background: rgba(255,255,255,0.1);
+            margin: 0 5px;
+        }
+
+        .action-btn {
+            width: auto;
+            padding: 0 15px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .save-btn {
+            background: linear-gradient(90deg, #00ffcc, #0088ff) !important;
+            color: black !important;
+            font-weight: 800;
+        }
+
+        /* Preview Elements */
+        #brush-preview {
+            position: absolute;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+            transform: translate(-50%, -50%);
+            z-index: 200;
+            mix-blend-mode: screen;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        #size-indicator {
+            position: absolute;
+            pointer-events: none;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: white;
+            white-space: nowrap;
+            background: rgba(0,0,0,0.5);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Status Panels */
+        .status-left {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(20,20,20,0.7);
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,255,200,0.2);
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-title {
+            font-size: 0.6rem;
+            color: #666;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .status-value {
+            font-size: 0.9rem;
+            color: #00ffcc;
+            font-weight: 800;
+        }
+
+        .hint-overlay {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .hint-text {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+        }
+
+        .pinch-hint {
+            font-size: 0.8rem;
+            color: rgba(0,255,200,0.4);
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-aura"></div>
+    <video id="video-src" autoplay playsinline muted></video>
+    <canvas id="draw-canvas"></canvas>
+    <canvas id="particle-canvas"></canvas>
+    
+    <div id="brush-preview">
+        <div id="size-indicator">SIZE: 8px</div>
+    </div>
+
+    <div class="toolbar">
+        <button class="tool-btn active" onclick="setMode('draw', '#00ffcc', this)" style="color: #00ffcc;">
+            <div class="color-dot" style="background: #00ffcc;"></div>
+        </button>
+        <button class="tool-btn" onclick="setMode('draw', '#ff0066', this)" style="color: #ff0066;">
+            <div class="color-dot" style="background: #ff0066;"></div>
+        </button>
+        <button class="tool-btn" onclick="setMode('draw', '#ffcc00', this)" style="color: #ffcc00;">
+            <div class="color-dot" style="background: #ffcc00;"></div>
+        </button>
+        <button class="tool-btn" onclick="setMode('draw', '#9d00ff', this)" style="color: #9d00ff;">
+            <div class="color-dot" style="background: #9d00ff;"></div>
+        </button>
+        
+        <div class="divider"></div>
+        
+        <button class="tool-btn" onclick="setMode('erase', null, this)" id="erase-btn" style="color: #fff;">
+            ERAS
+        </button>
+        
+        <div class="divider"></div>
+
+        <button class="tool-btn action-btn" onclick="undo()" title="Undo (Z)">UNDO</button>
+        <button class="tool-btn action-btn" onclick="redo()" title="Redo (X)">REDO</button>
+        <button class="tool-btn action-btn clear-btn" onclick="clearCanvas()">CLR</button>
+        
+        <div class="divider"></div>
+
+        <button class="tool-btn action-btn save-btn" onclick="saveImage()">SAVE</button>
+        <button class="tool-btn action-btn" onclick="window.location.href='index.html'" style="background: #333;">EXIT</button>
+    </div>
+
+    <div class="hint-overlay">
+        <div class="hint-text">👌 PINCH TO DRAW</div>
+        <div class="pinch-hint">TOUCH THUMB & INDEX TO BEGIN</div>
+    </div>
+
+    <div class="status-left">
+        <div class="status-title">Current Channel</div>
+        <div class="status-value" id="current-info">CHAKRA: CYAN</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('draw-canvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        const pCanvas = document.getElementById('particle-canvas');
+        const pCtx = pCanvas.getContext('2d');
+        const video = document.getElementById('video-src');
+        const info = document.getElementById('current-info');
+        const preview = document.getElementById('brush-preview');
+        const sizeTag = document.getElementById('size-indicator');
+
+        let mode = 'draw';
+        let brushColor = '#00ffcc';
+        let brushSize = 15; // Increased from 8 to 15
+        let isDrawing = false;
+        let lastX = 0, lastY = 0;
+        
+        // Smoothing & Stability
+        let sX = -1, sY = -1; // -1 indicates unitialized
+        const lerpFactor = 0.5; // Slightly faster for responsiveness
+        const PINCH_START = 0.065; // Relaxed from 0.04
+        const PINCH_STOP = 0.11;   // Relaxed from 0.075
+
+        // History Stacks
+        const history = [];
+        const redoStack = [];
+        const maxHistory = 20;
+
+        function saveState() {
+            if (history.length >= maxHistory) history.shift();
+            history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+            redoStack.length = 0;
+        }
+
+        function undo() {
+            if (history.length > 0) {
+                redoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+                const state = history.pop();
+                ctx.putImageData(state, 0, 0);
+            }
+        }
+
+        function redo() {
+            if (redoStack.length > 0) {
+                history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+                const state = redoStack.pop();
+                ctx.putImageData(state, 0, 0);
+            }
+        }
+
+        // Particle System
+        const particles = [];
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x; this.y = y;
+                this.color = color;
+                this.size = Math.random() * 4 + 2;
+                this.vx = (Math.random() - 0.5) * 6;
+                this.vy = (Math.random() - 0.5) * 6;
+                this.life = 1.0;
+                this.decay = Math.random() * 0.05 + 0.02;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                this.life -= this.decay;
+            }
+            draw() {
+                pCtx.globalAlpha = this.life;
+                pCtx.fillStyle = this.color;
+                pCtx.beginPath();
+                pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                pCtx.fill();
+            }
+        }
+
+        function animateParticles() {
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.update();
+                if (p.life <= 0) particles.splice(i, 1);
+                else p.draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Resize Canvas
+        function resize() {
+            const oldData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            pCanvas.width = canvas.width;
+            pCanvas.height = canvas.height;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.putImageData(oldData, 0, 0);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function setMode(m, color, btn) {
+            mode = m;
+            if (color) brushColor = color;
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if (mode === 'draw') {
+                info.innerText = `CHAKRA: ${color.toUpperCase()}`;
+                info.style.color = color;
+                preview.style.borderColor = color;
+                preview.style.backgroundColor = 'transparent';
+            } else {
+                info.innerText = `ERASER ACTIVE`;
+                info.style.color = '#fff';
+                preview.style.borderColor = 'white';
+                preview.style.backgroundColor = 'rgba(255,255,255,0.2)';
+            }
+        }
+
+        function clearCanvas() {
+            saveState();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function saveImage() {
+            const link = document.createElement('a');
+            link.download = 'chakra-masterpiece.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Keyboard Shortcuts
+        window.addEventListener('keydown', e => {
+            if (e.ctrlKey && e.key === 'z') undo();
+            if (e.ctrlKey && e.key === 'y') redo();
+        });
+
+        // MediaPipe Hands
+        const hands = new Hands({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+        });
+
+        hands.setOptions({
+            maxNumHands: 1,
+            modelComplexity: 1,
+            minDetectionConfidence: 0.75,
+            minTrackingConfidence: 0.75
+        });
+
+        hands.onResults((results) => {
+            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                const landmarks = results.multiHandLandmarks[0];
+                
+                // Detection Points
+                const tip = landmarks[8]; // Index Tip
+                const thumb = landmarks[4]; // Thumb Tip
+                
+                // Pinch detection with Hysteresis (2D distance is more stable)
+                const rawDist = Math.hypot(thumb.x - tip.x, thumb.y - tip.y);
+                
+                const threshold = isDrawing ? PINCH_STOP : PINCH_START;
+                const isPinching = rawDist < threshold;
+
+                // Map coordinates
+                const targetX = (1 - tip.x) * canvas.width;
+                const targetY = tip.y * canvas.height;
+                
+                // Initialize smoothing on first detection
+                if (sX === -1) { sX = targetX; sY = targetY; }
+                
+                // Apply Lerp for ultra-smooth movement
+                sX += (targetX - sX) * lerpFactor;
+                sY += (targetY - sY) * lerpFactor;
+
+                // UI Preview Update
+                preview.style.left = `${sX}px`;
+                preview.style.top = `${sY}px`;
+                preview.style.width = `${brushSize}px`;
+                preview.style.height = `${brushSize}px`;
+                preview.style.display = 'block';
+                sizeTag.innerText = `BRUSH: ${Math.round(brushSize)}px`;
+
+                if (isPinching) {
+                    if (!isDrawing) {
+                        saveState();
+                        isDrawing = true;
+                        lastX = sX;
+                        lastY = sY;
+                    } else {
+                        // Continuous gap-free line logic
+                        ctx.beginPath();
+                        ctx.moveTo(lastX, lastY);
+                        ctx.lineTo(sX, sY);
+                        
+                        if (mode === 'draw') {
+                            ctx.globalCompositeOperation = 'source-over';
+                            ctx.strokeStyle = brushColor;
+                            ctx.lineWidth = brushSize;
+                            ctx.shadowBlur = brushSize / 2;
+                            ctx.shadowColor = brushColor;
+                            
+                            // Particle effects on move
+                            if (Math.random() > 0.4) {
+                                particles.push(new Particle(sX, sY, brushColor));
+                            }
+                        } else {
+                            ctx.globalCompositeOperation = 'destination-out';
+                            ctx.lineWidth = brushSize * 2.5;
+                            ctx.shadowBlur = 0;
+                        }
+                        
+                        ctx.stroke();
+                        lastX = sX;
+                        lastY = sY;
+                    }
+                } else {
+                    isDrawing = false;
+                }
+            } else {
+                isDrawing = false;
+                preview.style.display = 'none';
+            }
+        });
+
+        const camera = new Camera(video, {
+            onFrame: async () => {
+                await hands.send({image: video});
+            },
+            width: 1280, height: 720
+        });
+        camera.start();
+    </script>
+</body>
+</html>
