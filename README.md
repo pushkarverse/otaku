@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌊 OTAKU: Anime Technique Visualizer
+# ⛩️ OTAKU
 
 **OTAKU** — A high-performance, modular motion-tracking platform that brings your favorite anime techniques to life through the web.  
 Powered by **MediaPipe**, **Three.js**, and **pnpm**.
@@ -91,13 +91,10 @@ Customization is available in `src/js/config.js` and individual module files:
 
 ---
 
+---
+
 <div align="center">
 
-## 🌟 Connect
-
-If you like this project, please consider:
-**⭐ Giving it a Star on GitHub!**
-
-> *"Nah, I'd win."* — Gojo Satoru
+**⭐ Give it a Star on GitHub if you like it!**
 
 </div>
