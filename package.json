@@ -4,7 +4,7 @@
   "description": "Interactive WebAR experience visualizing Gojo Satoru's Cursed Techniques using Three.js and Hand Tracking.",
   "main": "index.html",
   "scripts": {
-    "start": "http-server . -o -s",
+    "start": "npx -y http-server . -o -s",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
