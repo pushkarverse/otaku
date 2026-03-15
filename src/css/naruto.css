@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Noto+Serif+JP:wght@900&display=swap');
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: black;
+    font-family: 'Cinzel', serif;
+}
+
+#v_src,
+#out {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    transform: scaleX(-1);
+}
+
+#v_src {
+    z-index: 0;
+}
+
+#out {
+    z-index: 3;
+    pointer-events: none;
+}
+
+.darkness {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 5, 0, 0.3);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.fx {
+    position: absolute;
+    height: auto;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    display: none;
+    mix-blend-mode: screen;
+    z-index: 20;
+}
+
+#n {
+    width: 1600px;
+}
+
+#s {
+    width: 2400px;
+}
+
+#n,
+#s {
+    position: absolute;
+    opacity: 0.01;
+    pointer-events: none;
+    z-index: -1;
+}
+
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.jutsu-label {
+    position: absolute;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: blur(10px);
+    transform: translateY(20px);
+    pointer-events: none;
+}
+
+.jutsu-label.active {
+    opacity: 1;
+    transform: translateY(0) !important;
+    filter: blur(0px);
+}
+
+#jutsu-left {
+    bottom: 40px;
+    left: 40px;
+    align-items: flex-start;
+    text-align: left;
+}
+
+#jutsu-right {
+    bottom: 40px;
+    right: 40px;
+    align-items: flex-end;
+    text-align: right;
+}
+
+#jutsu-center {
+    bottom: 40px;
+    left: 50%;
+    transform: translate(-50%, 20px);
+    align-items: center;
+    text-align: center;
+}
+
+#jutsu-center.active {
+    transform: translate(-50%, 0) !important;
+}
+
+.kanji {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 5rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 20px rgba(0, 150, 255, 0.8), 0 0 40px rgba(0, 150, 255, 0.5);
+    line-height: 1;
+    margin: 0;
+    letter-spacing: 12px;
+}
+
+.romaji {
+    font-size: 1.8rem;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 15px;
+    margin-top: 10px;
+    text-shadow: 0 0 15px rgba(0, 150, 255, 0.8);
+    font-weight: 700;
+}
+
+.hints {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
