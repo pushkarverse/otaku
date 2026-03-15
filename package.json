@@ -1,10 +1,10 @@
 {
-  "name": "satoru-gojo-techniques",
+  "name": "otaku",
   "version": "1.0.0",
-  "description": "Interactive WebAR experience visualizing Gojo Satoru's Cursed Techniques using Three.js and Hand Tracking.",
+  "description": "Interactive WebAR experience visualizing various anime techniques using Three.js and MediaPipe.",
   "main": "index.html",
   "scripts": {
-    "start": "npx -y http-server . -o -s",
+    "start": "pnpm exec http-server . -o -s",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
