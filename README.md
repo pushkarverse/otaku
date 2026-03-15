@@ -1,63 +1,82 @@
 <div align="center">
 
-# 🤞 Jujutsu Kaisen: Gojo Satoru — Cursed Technique Visualizer
+# 🌊 OTAKU: Anime Technique Visualizer
 
-**SAT0RU SYSTEM** — Bringing the Limitless into reality.  
-Interactive WebAR experience powered by **Three.js** and **MediaPipe**.
+**OTAKU** — A high-performance, interactive motion-tracking platform that brings your favorite anime techniques to life through the web.  
+Powered by **MediaPipe**, **Three.js**, and **TensorFlow.js**.
 
-## 🔴🔵🟣 LIVE DEMO: [gojosat0ru.netlify.app](https://gojosat0ru.netlify.app)
-
-![Demo](video/demo.gif)   
+## 🚀 LIVE DEMO: [otaku-verse.vercel.app](https://otaku-verse.vercel.app)
 
 </div>
 
-## ✨ Features & Techniques
+## ✨ Project Modules & Techniques
 
-Using advanced particle systems and post-processing (Bloom, Shake), the system visualizes:
+This project features several specialized modules, each using advanced hand/pose tracking to trigger unique visual and audio effects.
+
+### 🤞 Gojo Satoru — JJK Module
+*Trigger techniques using precise hand gestures.*
 
 | Technique | Trigger | Visuals |
 | :--- | :--- | :--- |
-| **🔴 RED (赫)**<br>Cursed Technique Reversal | Extend **Left Index Finger** | White-hot core, red lightning sparks, screen shake. violent repulsive force. |
-| **🔵 BLUE (蒼)**<br>Cursed Technique Lapse | Extend **Right Index Finger** | Electric Blue + Cyan vortex, implosion effect. Chaotic attractive force. |
-| **🟣 PURPLE (茈)**<br>Hollow Technique | **Fuse:** Bring Left & Right Index together<br>**Fire:** 3-Finger Charge + Snap | Massive Purple sphere, high intensity bloom, debris particles. The ultimate destruction. |
-| **🌌 UNLIMITED VOID (無量空処)**<br>Domain Expansion | **Cross Fingers** (Index + Middle) | **Warp Speed Intro** (hyperspace streaks) → **Black Hole** (massive accretion disk) → **Cosmic Dimming**. |
+| **🔴 RED (赫)** | Extend **Left Index Finger** | White-hot core, red lightning, repulsive force. |
+| **🔵 BLUE (蒼)** | Extend **Right Index Finger** | Electric blue vortex, attractive force. |
+| **🟣 PURPLE (茈)** | **Fuse:** Bring Index Fingers together<br>**Fire:** Snap/Charge | Massive purple sphere of ultimate destruction. |
+| **🌌 UNLIMITED VOID** | **Cross Fingers** (Index + Middle) | Hyperspace streaks → Black hole accretion disk. |
+
+### 🍥 Naruto — Shinobi Module
+*Channel chakra and perform jutsu with hand signs.*
+
+| Jutsu | Gesture | Details |
+| :--- | :--- | :--- |
+| **🌀 RASENGAN** | **Right Hand Open** | Swirling chakra sphere with custom audio. |
+| **⚡ CHIDORI** | **Left Hand Open** | Lightning blade effect with high-voltage sound. |
+| **👥 SHADOW CLONE** | **Parallel Peace Signs** | Spawns multiple physical clones with smoke effects. |
+| **🎇 RASEN CHIDORI** | **Clasp Hands Together** | Combined elemental attack with massive bloom. |
+
+### 🐉 Dragon Ball Z — Saiyan Module
+*Hone your Ki and master the legendary Kamehameha.*
+
+- **CHARGE**: Bring hands together in a cupped position. Watch the Ki gather.
+- **FIRE**: Thrust arms forward and open hands to unleash the beam.
+- *Includes dynamic camera shake and iconic audio cues.*
+
+### 🎨 Free Draw — Creative Module
+*Paint the canvas using your fingertips.*
+
+- **👌 PINCH TO DRAW**: Touch Thumb and Index finger to start sketching.
+- **✨ CHAKRA BRUSH**: Multi-colored glowing strokes with particle trails.
+- **🛠️ TOOLS**: Undo/Redo support, Clear, and PNG Save functionality.
 
 ## 🛠️ Installation & Usage
 
-1.  **Clone the repository**
+1.  **Clone & Enter**
     ```bash
-    git clone https://github.com/justHman/GOJO_SATORU.git
-    cd GOJO_SATORU
+    git clone https://github.com/pushkarverse/otaku.git
+    cd otaku
     ```
 
-2.  **Install dependencies** (optional)
-    ```bash
-    npm install
-    ```
-
-3.  **Run the project**
-    *   Simply open `index.html` in a modern browser (Chrome/Edge recommended).
-    *   OR run a local server:
+2.  **Run Locally**
+    *   Simply open `index.html` in any modern browser.
+    *   **Recommended**: Use a local server for the best experience:
         ```bash
         npx http-server .
         ```
 
 ## ⚙️ Configuration
 
-You can customize effects in `config.js`:
-*   **Particle Counts**: Adjust `BALL_COUNT` for performance.
-*   **Colors & Sizes**: Tweak `RED`, `BLUE`, `PURPLE` settings.
-*   **Warp Speed**: Change `warpSpeed`, `warpDuration` in `VOID` section.
+Customization is available in `config.js` and individual module files:
+- **Performance**: Adjust `BALL_COUNT` or `particleLimit`.
+- **Sensitvity**: Tweak `DetectionConfidence` thresholds.
+- **Visuals**: Modify HSL color palettes and bloom intensities.
 
 ---
 
 <div align="center">
 
-## 🌟 Support & Connect
+## 🌟 Connect
 
-If you enjoyed this project, please consider:
-**⭐ Giving it a Star on GitHub!**  
-Sharing your cursed techniques with `#SAT0RU`
+If you like this project, please consider:
+**⭐ Giving it a Star on GitHub!**
 
 > *"Nah, I'd win."* — Gojo Satoru
 
