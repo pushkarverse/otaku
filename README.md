@@ -55,12 +55,12 @@ This project features several specialized modules, each using advanced hand/pose
     cd otaku
     ```
 
-2.  **Run Locally**
-    *   Simply open `index.html` in any modern browser.
-    *   **Recommended**: Use a local server for the best experience:
+2. **Run Locally**
+    *   Simply run the following command to start a local development server:
         ```bash
-        pnpm dlx http-server .
+        pnpm start
         ```
+    *   Then open your browser to `http://localhost:8080` (or the port shown in your terminal).
 
 ## ⚙️ Configuration
 
