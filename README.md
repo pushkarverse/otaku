@@ -5,7 +5,7 @@
 **OTAKU** — A high-performance, interactive motion-tracking platform that brings your favorite anime techniques to life through the web.  
 Powered by **MediaPipe**, **Three.js**, and **TensorFlow.js**.
 
-## 🚀 LIVE DEMO: [otaku-verse.vercel.app](https://otaku-verse.vercel.app)
+
 
 </div>
 
