@@ -2,8 +2,8 @@
 
 # 🌊 OTAKU: Anime Technique Visualizer
 
-**OTAKU** — A high-performance, interactive motion-tracking platform that brings your favorite anime techniques to life through the web.  
-Powered by **MediaPipe**, **Three.js**, and **TensorFlow.js**.
+**OTAKU** — A high-performance, modular motion-tracking platform that brings your favorite anime techniques to life through the web.  
+Powered by **MediaPipe**, **Three.js**, and **pnpm**.
 
 
 
@@ -47,6 +47,26 @@ This project features several specialized modules, each using advanced hand/pose
 - **✨ CHAKRA BRUSH**: Multi-colored glowing strokes with particle trails.
 - **🛠️ TOOLS**: Undo/Redo support, Clear, and PNG Save functionality.
 
+## 🏗️ Project Structure
+
+The project follows a clean, modular architecture:
+
+```text
+/
+├── assets/           (Global media: sounds, textures, videos)
+├── src/
+│   ├── css/          (Modular stylesheets)
+│   ├── js/
+│   │   ├── core/     (Shared logic: MediaPipe/Three.js utilities)
+│   │   ├── modules/  (Feature-specific logic)
+│   │   └── config.js (Centralized configuration)
+├── index.html        (Landing Page / Technique Selector)
+├── gojo.html         (JJK Module Entry)
+├── naruto.html       (Shinobi Module Entry)
+├── dbz.html          (Saiyan Module Entry)
+└── draw.html         (Creative Module Entry)
+```
+
 ## 🛠️ Installation & Usage
 
 1.  **Clone & Enter**
@@ -64,9 +84,9 @@ This project features several specialized modules, each using advanced hand/pose
 
 ## ⚙️ Configuration
 
-Customization is available in `config.js` and individual module files:
+Customization is available in `src/js/config.js` and individual module files:
 - **Performance**: Adjust `BALL_COUNT` or `particleLimit`.
-- **Sensitvity**: Tweak `DetectionConfidence` thresholds.
+- **Sensitivity**: Tweak `DetectionConfidence` thresholds.
 - **Visuals**: Modify HSL color palettes and bloom intensities.
 
 ---
