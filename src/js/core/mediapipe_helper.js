@@ -13,7 +13,11 @@ export class MediaPipeHelper {
     static async initCamera(videoElement, onFrameCallback) {
         const camera = new Camera(videoElement, {
             onFrame: async () => {
-                await onFrameCallback();
+                try {
+                    await onFrameCallback();
+                } catch (e) {
+                    console.error('MediaPipe Camera Callback Error:', e);
+                }
             },
             width: 1280,
             height: 720
@@ -41,7 +45,13 @@ export class MediaPipeHelper {
             ...options
         });
         
-        hands.onResults(onResults);
+        hands.onResults((results) => {
+            try {
+                onResults(results);
+            } catch (e) {
+                console.error('MediaPipe Hands Callback Error:', e);
+            }
+        });
         return hands;
     }
 
@@ -64,7 +74,13 @@ export class MediaPipeHelper {
             ...options
         });
 
-        pose.onResults(onResults);
+        pose.onResults((results) => {
+            try {
+                onResults(results);
+            } catch (e) {
+                console.error('MediaPipe Pose Callback Error:', e);
+            }
+        });
         return pose;
     }
 }
