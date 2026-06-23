@@ -1,7 +1,5 @@
 <div align="center">
-
-![OTAKU Cover](assets/cover.png)
-
+    
 # ⛩️ OTAKU
 
 An immersive real-time motion-tracking application leveraging advanced computer vision and 3D rendering to visualize iconic anime techniques.
